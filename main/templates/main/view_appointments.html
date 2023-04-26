@@ -35,27 +35,3 @@
 {% endblock %}
 
 
-
-
-
-
-
-
-
-
-
-
-{% comment %} {% extends 'main/base.html' %}
-
-
-{% block content %}
-<h1>APPOINTMENTS</h1>
-<ul>
-    {% for appointment in appointments %}
-        <li>{{ appointment.patient_name }} - {{ appointment.appointment_time }} - {{ appointment.doctors_name }}</li>
-
-    {% empty %}
-        <li>No appointments found.</li>
-    {% endfor %}
-
-{% endblock %}     {% endcomment %}
