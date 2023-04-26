@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+
+
+{% block content %}
+<h1>Health-T</h1>
+
+<a href="{% url 'view-appointments' %}">View Appointments</a>
+<a href="{% url 'create-appointment' %}">Create Appointment</a>
+<a href="">Input health data</a>
+<a href="">Request Ambulance</a>
+
+{% endblock %}
