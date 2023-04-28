@@ -6,8 +6,33 @@
 
     {% csrf_token %}
 
+    <label for="username">Username: </label>
+    <input type="text" id="username" name="name">
+   
+    <select name="doctor" id="doctor">
+        {% for doctor in doctors %}
+            <option value="{{ doctor.id }}">{{ doctor.first_name }} - - {{doctor.specialization}}</option>
+        {% endfor %}
+    </select>
 
-    <input type="submit" value="Save">
+
+    <label for="email">Email: </label>
+    <input type="email", placeholder="someone@example.com" id="email" name="email">
+
+    <label for="date">Appointment Date: </label>
+    <input type="datetime-local" id="date" name="date">
+
+    <label for="notes">Health Notes: </label>
+    <textarea name="notes" rows="5" cols="50"></textarea>
+
+    <label for="phone">Phone Number: </label>
+    <input type="phone" name="phone" id="phone">
+
+
+    <input type="submit" value="Book Appointment">
+
+    <br>
+    {% include "main/includes/dashboard.html" %}
 </form>
 
 {% endblock %}

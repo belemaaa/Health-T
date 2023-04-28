@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from .models import Doctor, Patient, Appointment
 import random
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -23,42 +23,50 @@ def register(request):
             context = {
                 'error': 'Email already exists'
             }
-            return render(request, 'register.html', context)
+            return render(request, 'main/register.html', context)
         
         
         else:
             new_patient = Patient(matric=matric_no, email=email, phone=phone, password=password, card_no=card_no)
             new_patient.save()
             messages.success(request, 'Account successfully created')
-            return redirect('login')
+            return render(request, "main/login.html")
 
     return render(request, 'main/register.html')
 
 
 
 
-def loginView(request):
+def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        email = request.POST['email']
+        # password = request.POST.get('password', '')
 
-        if user is not None:
-            login(request, user)
-            return redirect('home')
+        password = request.POST['password']
+        
+        patient = Patient.objects.filter(email=email, password=password)
+
+        #request.session['patient'] = patient.email
+
+
+    
+        if patient:
+            return render(request, "main/index.html")
 
         else:
-            messages.error(request, 'Invalid Username or Password') 
-            return render(request, 'main/login.html')
+            context = {
+                'error': 'Invalid username or password'
+            }
+            return render(request, "main/login.html", context)
 
-    return render(request, 'main/login.html')  
+    return render(request, "main/login.html")  
 
 
 
 
 # home page view
 def index(request):
-    return render(request, 'main/index.html')
+    return render(request, "main/index.html")
 
 
 
@@ -68,38 +76,72 @@ def generate_id():
 
 
 
+
 def book_appointment(request):
+
+    doctors = Doctor.objects.all()
+
     if request.method == 'POST':
-        username = request.POST['name']
-        doctor = request.POST['doctor']
-        email = request.POST['email']
-        date = request.POST['appointment_time']
-        notes = request.POST['health_notes']
-        phone = request.POST['phone_no']
+       # inputed_email = request.POST['name']
+        doctor_id = request.POST['doctor']
+        inputed_email = request.POST['email']
+        date = request.POST['date']
+        notes = request.POST['notes']
+        phone = request.POST['phone']
         access_id = generate_id()
 
-        new_appointment = Appointment(doctor=doctor, email=email, appointment_time=date, health_notes=notes, phone_no=phone, access_id=access_id)
+
+        patient = Patient.objects.get(email=inputed_email)
+        
+        doctor = Doctor.objects.get(id=doctor_id)
+
+        print(doctors)
+
+
+
+        new_appointment = Appointment(
+            patient=patient,
+            doctor=doctor, 
+            email=inputed_email, 
+            appointment_time=date, 
+            health_notes=notes, 
+            phone_no=phone, 
+            access_id=access_id
+            )
+
         new_appointment.save()
 
         context = {
             'token' : access_id,
-            'email' : email,
-            'appointment_time': date
+            'email' : inputed_email,
+            'appointment_time': date,
+             
         }
         return render(request, 'main/id_page.html', context)
 
-    return render(request, 'main/book_appointment.html')
+    context = {
+        'doctors' : doctors
+    }
+    return render(request, 'main/book_appointment.html', context)
+
 
 
 
 def view_appointments(request):
-    appointments = Appointment.objects.filter(patient=request.user.patient)
-    return render(request, 'main/view_appointments.html', {'appointments': appointments})
+
+    # patient_id = request.session['patient']
+
+    # patient_view = Patient.objects.get(email=patient_id)
+
+    appointments = Appointment.objects.filter()
+    return render(request, "main/view_appointments.html", {'appointments': appointments})
+
 
 
 
 def input_health_data(request):
     return render(request, 'main/health_data.html')
+
 
 
 def request_ambulance(request):

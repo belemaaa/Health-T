@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h1>Login Page</h1>
+
+<form method='POST'>
+
+    {% csrf_token %} 
+
+    <label for="email">Email: </label>
+    <input type="email" name="email" required>
+
+    <br>
+    <br>
+
+    <label for="password">Password: </label>
+    <input type="password" name="password" placeholder="****" required>
+
+    <br>
+    <br>
+
+    <input type="submit" value="Submit"> 
+
+    <br>
+    <br>
+
+    <p>Don't have an account? <a href="{% url 'register' %}">Register</a><p>
+
+{% endblock %}

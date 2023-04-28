@@ -7,19 +7,19 @@
       <tr>
         <th>Doctor</th>
         <th>  </th>
-        <th>Patient Name</th>
-        <th> </th>
         <th>Appointment Date</th>
+        <th> </th>
+        <th>Appointment ID</th>
       </tr>
     </thead>
     <tbody>
       {% for appointment in appointments %}
         <tr>
-          <td>{{ appointment.doctors_name }}</td>
+          <td>{{ appointment.doctor }}</td>
           <td>  </td>
-          <td>{{ appointment.patients_name }}</td>
-          <td></td>
           <td>{{ appointment.appointment_time }}</td>
+          <td></td>
+          <td>{{  }}</td>
         </tr>
 
       {% empty %}
@@ -31,7 +31,7 @@
   </table>
 
 
-<a href="{% url 'index' %}">Return to Dashboard</a>  
+  {% include "main/includes/dashboard.html" %} 
 {% endblock %}
 
 
