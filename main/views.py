@@ -16,16 +16,13 @@ def register(request):
         phone = request.POST['phone']
         password = request.POST['password']
         card_no = request.POST['card_no']
-         
-        
+          
         existing_patient = Patient.filter(email=email)
         if existing_patient:
             context = {
                 'error': 'Email already exists'
             }
-            return render(request, 'main/register.html', context)
-        
-        
+            return render(request, 'main/register.html', context)    
         else:
             new_patient = Patient(matric=matric_no, email=email, phone=phone, password=password, card_no=card_no)
             new_patient.save()
@@ -34,51 +31,33 @@ def register(request):
 
     return render(request, 'main/register.html')
 
-
-
-
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         # password = request.POST.get('password', '')
-
         password = request.POST['password']
         
         patient = Patient.objects.filter(email=email, password=password)
-
         #request.session['patient'] = patient.email
-
-
     
         if patient:
             return render(request, "main/index.html")
-
         else:
             context = {
                 'error': 'Invalid username or password'
             }
             return render(request, "main/login.html", context)
-
     return render(request, "main/login.html")  
-
-
-
 
 # home page view
 def index(request):
     return render(request, "main/index.html")
 
-
-
 # generate unique id
 def generate_id():
     return ''.join(random.choices('123456789', k=10))
 
-
-
-
 def book_appointment(request):
-
     doctors = Doctor.objects.all()
 
     if request.method == 'POST':
@@ -90,14 +69,9 @@ def book_appointment(request):
         phone = request.POST['phone']
         access_id = generate_id()
 
-
-        patient = Patient.objects.get(email=inputed_email)
-        
+        patient = Patient.objects.get(email=inputed_email) 
         doctor = Doctor.objects.get(id=doctor_id)
-
         print(doctors)
-
-
 
         new_appointment = Appointment(
             patient=patient,
@@ -108,41 +82,26 @@ def book_appointment(request):
             phone_no=phone, 
             access_id=access_id
             )
-
         new_appointment.save()
-
         context = {
             'token' : access_id,
             'email' : inputed_email,
-            'appointment_time': date,
-             
+            'appointment_time': date,     
         }
         return render(request, 'main/id_page.html', context)
-
     context = {
         'doctors' : doctors
     }
     return render(request, 'main/book_appointment.html', context)
 
-
-
-
 def view_appointments(request):
-
     # patient_id = request.session['patient']
-
     # patient_view = Patient.objects.get(email=patient_id)
-
     appointments = Appointment.objects.filter()
     return render(request, "main/view_appointments.html", {'appointments': appointments})
 
-
-
-
 def input_health_data(request):
     return render(request, 'main/health_data.html')
-
-
 
 def request_ambulance(request):
     return render(request, 'main/request_ambulance.html')
