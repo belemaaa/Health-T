@@ -18,8 +18,6 @@ class Doctor(models.Model):
 
 class Patient(models.Model):
     matric = models.CharField(max_length=7, default=None)
-    #assigned_doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE, default=None)
-
     email = models.EmailField(max_length=40, null=True, blank=True)
     phone_no = models.CharField(max_length=15, default=None)
     password = models.CharField(max_length=50, default=None)
@@ -41,6 +39,6 @@ class Appointment(models.Model):
 
 
     def __str__(self):
-         return f"Appointment with Doctor {self.doctor} on {self.appointment_time}"
+         return f"Appointment with Doctor {self.doctor} on {self.appointment_time}. access id: {self.access_id}"
 
     

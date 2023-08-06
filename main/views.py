@@ -34,7 +34,6 @@ def register(request):
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
-        # password = request.POST.get('password', '')
         password = request.POST['password']
         
         patient = Patient.objects.filter(email=email, password=password)
@@ -61,7 +60,6 @@ def book_appointment(request):
     doctors = Doctor.objects.all()
 
     if request.method == 'POST':
-       # inputed_email = request.POST['name']
         doctor_id = request.POST['doctor']
         inputed_email = request.POST['email']
         date = request.POST['date']
